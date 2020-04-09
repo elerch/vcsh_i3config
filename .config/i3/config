@@ -78,7 +78,7 @@ bindsym $mod+Shift+n exec i3-input -F 'rename workspace to "%s"' -P 'New name: '
 # Use AWS Vault to pick a thingy. This is rofi/zsh/aws-vault only for now
 # We do not use -i, so appropriate setting of .xsession/.xprofile/.xsessionrc
 # is expected
-bindsym $mod+Shift+d exec "zsh -c 'profile=$(rofi -theme Arc-Dark -dmenu <<(aws-vault list | tail -n +3 |cut -d\  -f1|sort)); aws-vault login $profile'"
+bindsym $mod+Shift+d exec "zsh -c 'profile=$(rofi -theme Arc-Dark -dmenu <<(aws-vault list | tail -n +3 |cut -d\  -f1|sort) -p Profile); aws-vault login $profile'"
 # split in horizontal orientation
 bindsym $mod+bar split h
 
