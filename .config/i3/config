@@ -216,6 +216,7 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+bindsym $mod+v exec webcamsettings
 #bindsym $mod+c exec chromium
 #bindsym $mod+e exec pcmanfm # give a nod to Windows ;-)
 
