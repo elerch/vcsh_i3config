@@ -221,6 +221,7 @@ bindsym $mod+v exec webcamsettings
 #bindsym $mod+e exec pcmanfm # give a nod to Windows ;-)
 
 for_window [class="(?i)vlc"] floating enable
+for_window [title="Microsoft Teams Notification"] floating enable
 
 # Load xresources
 exec --no-startup-id xrdb ~/.Xresources
