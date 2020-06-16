@@ -31,7 +31,7 @@ font pango:DejaVu Sans Mono 8
 floating_modifier $mod
 
 # start a terminal
-bindsym $mod+Return exec TERMINAL=st i3-sensible-terminal
+bindsym $mod+Return exec i3-sensible-terminal
 
 # kill focused window
 bindsym $mod+Shift+q kill
@@ -88,10 +88,17 @@ bindsym $mod+minus split v
 # enter fullscreen mode for the focused container
 bindsym $mod+f fullscreen toggle
 
+# This just screws me up - I can't get the zen for anything but normal
 # change container layout (stacked, tabbed, toggle split)
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+x layout toggle split
+# bindsym $mod+s layout stacking
+# bindsym $mod+w layout tabbed
+# bindsym $mod+x layout toggle split
+
+bindsym $mod+x [urgent=latest] focus
+bindsym Shift+Control+Escape exec "i3-sensible-terminal -e top"
+# should be 'question', but that doesn't seem to work. This works,
+# but assumes US keyboard
+bindsym $mod+Shift+slash exec i3-sensible-terminal -e /bin/sh -ic "vi ${HOME}/.config/i3/config"
 
 # toggle tiling / floating
 bindsym $mod+Shift+space floating toggle
