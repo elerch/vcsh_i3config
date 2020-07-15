@@ -315,7 +315,7 @@ bar {
       urgent_workspace    $base08 $base08 $base00
       binding_mode        $base00 $base0A $base00
   }
-  status_command i3status
+  status_command i3status_weather
   tray_output primary
 #  tray_output HDMI-1
 #  tray_output HDMI-2

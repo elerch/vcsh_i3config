@@ -1,0 +1,41 @@
+#!/bin/sh
+if [ "$#" -lt 2 ]; then
+  echo 'usage: cache [-q] <seconds> <command>'
+  return 1
+fi
+if [ "$1" = "-q" ]; then
+  shift
+else
+  echo 'WARNING: this utility only caches stdout of successful commands' >&2
+fi
+uid=$(id -u)
+cachedir="${XDG_RUNTIME_DIR:-/run/user}"
+[ "$cachedir" = "/run/user" ] && cachedir="${cachedir}/${uid}/"
+cachedir="${cachedir}/commandcache"
+mkdir -p "$cachedir"
+seconds="$1"
+shift
+cmdsha="$(echo "$@" | shasum|cut -d\  -f1)"
+filename="${cachedir}/${cmdsha}-out.cache"
+time="${cachedir}/${cmdsha}-time.cache"
+# POSIX way of getting seconds
+secondssinceepoch=$(PATH=$(getconf PATH) awk 'BEGIN{srand();print srand()}')
+if [ -r "$time" ]; then
+  commandtime="$(cat "$time")"
+  if [ "$(( commandtime + seconds ))" -lt "$secondssinceepoch" ]; then
+    # cache expired
+    rm "$filename"
+    rm "$time"
+  fi
+fi
+if [ ! -r "$filename" ]; then
+  (exec "$@") 2>/dev/null > "$filename"
+  rc=$?
+  if [ $rc -ne 0 ]; then
+    rm "$filename"
+    echo "ERROR: Command not successful" >&2
+    return $rc
+  fi
+  printf "%s" "$secondssinceepoch" > "$time"
+fi
+cat "$filename"
