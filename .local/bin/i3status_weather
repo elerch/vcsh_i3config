@@ -1,17 +1,16 @@
 #!/bin/sh
 
 cachetime=1800 # 30 minutes
-# color=#FFFFFF # white - do we want this?
 json='{"name":"weather","instance":"local","markup":"none"'
-if [ -n "$color" ]; then
-    json=${json}',"color":"'$color'"'
-fi
 json=${json}',"full_text":"'
 i3status | while :
 do
-  read line
+  read -r line
   if [ "${line%${line#??}}" = "[{" ] || [ "${line%${line#???}}" = ",[{" ]; then
-    echo "${line%]},${json}$(cache -q $cachetime curl wttr.in/?format="+%c+%t")\"}]" || exit 1
+    wtr="$(cache -q $cachetime curl wttr.in/?format="%c|%t")"
+    forecast="$(echo "$wtr" | cut -d\| -f1)"
+    temp="$(echo "$wtr" | cut -d\| -f2)"
+    echo "${line%]},${json}${forecast}\",\"color\":\"#FFFFFF\"},${json}${temp}\"}]" || exit 1
   else
     echo "$line"
   fi
