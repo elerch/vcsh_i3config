@@ -8,9 +8,13 @@ do
   read -r line
   if [ "${line%${line#??}}" = "[{" ] || [ "${line%${line#???}}" = ",[{" ]; then
     wtr="$(cache -q $cachetime curl wttr.in/?format="%c|%t")"
-    forecast="$(echo "$wtr" | cut -d\| -f1)"
-    temp="$(echo "$wtr" | cut -d\| -f2)"
-    echo "${line%]},${json}${forecast}\",\"color\":\"#FFFFFF\"},${json}${temp}\"}]" || exit 1
+    if [ ${#wtr} -lt 10 ]; then
+      forecast="$(echo "$wtr" | cut -d\| -f1)"
+      temp="$(echo "$wtr" | cut -d\| -f2)"
+      echo "${line%]},${json}${forecast}\",\"color\":\"#FFFFFF\"},${json}${temp}\"}]" || exit 1
+    else
+      echo "${line%]},${json}weather err!\",\"color\":\"#FF0000\"}]" || exit 1
+    fi
   else
     echo "$line"
   fi
