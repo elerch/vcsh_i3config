@@ -7,12 +7,14 @@ i3status | while :
 do
   read -r line
   if [ "${line%${line#??}}" = "[{" ] || [ "${line%${line#???}}" = ",[{" ]; then
-    wtr="$(cache -q $cachetime curl wttr.in/?format="%c|%t")"
-    if [ ${#wtr} -lt 10 ]; then
+    wtr="$(cache -q $cachetime curl https://wttr.lerch.org/?format="%c|%t"\&use_imperial=true)"
+    if [ ${#wtr} -lt 15 ]; then
       forecast="$(echo "$wtr" | cut -d\| -f1)"
       temp="$(echo "$wtr" | cut -d\| -f2)"
       echo "${line%]},${json}${forecast}\",\"color\":\"#FFFFFF\"},${json}${temp}\"}]" || exit 1
     else
+      ## echo ${#wtr}
+      # echo $wtr
       echo "${line%]},${json}weather err!\",\"color\":\"#FF0000\"}]" || exit 1
     fi
   else
