@@ -82,6 +82,10 @@ bindsym $mod+Shift+d exec "zsh -c 'profile=$(rofi -theme Arc-Dark -dmenu <<(aws-
 # split in horizontal orientation
 bindsym $mod+bar split h
 
+# "minimize"
+bindsym $mod+m move scratchpad
+bindsym $mod+Shift+m scratchpad show
+
 # split in vertical orientation
 bindsym $mod+minus split v
 
