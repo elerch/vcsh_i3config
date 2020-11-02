@@ -244,7 +244,7 @@ exec --no-startup-id xmodmap ~/.Xmodmap
 exec --no-startup-id parcellite
 
 # Start compositor
-exec --no-startup-id compton
+exec --no-startup-id picom
 
 # Background image
 exec --no-startup-id feh --bg-scale ~/backgrounds/2017-eclipse-16x9.jpg
