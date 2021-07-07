@@ -246,6 +246,9 @@ exec --no-startup-id parcellite
 # Start compositor
 exec --no-startup-id picom
 
+# Start xsettings so we can pass themes to flatpak
+exec --no-startup-id xsettingsd
+
 # Background image
 exec --no-startup-id feh --bg-scale ~/backgrounds/2017-eclipse-16x9.jpg
 
