@@ -176,11 +176,11 @@ bindsym $mod+F8 exec --no-startup-id "pactl set-sink-mute $(pacmd list-sinks |gr
 #bindsym Mod1+Tab exec --no-startup-id "rofi -show window"
 
 # Sreen brightness controls
-bindsym XF86MonBrightnessUp exec xbacklight -inc 10 # increase screen brightness
-bindsym $mod+F7 exec xbacklight -inc 10 # increase screen brightness
+bindsym XF86MonBrightnessUp exec xbacklight -inc 10 || brightnessctl s +10% # increase screen brightness
+bindsym $mod+F7 exec xbacklight -inc 10 || brightnessctl s +10% # increase screen brightness
 
-bindsym XF86MonBrightnessDown exec xbacklight -dec 10 # decrease screen brightness
-bindsym $mod+F6 exec xbacklight -dec 10 # decrease screen brightness
+bindsym XF86MonBrightnessDown exec xbacklight -dec 10 || brightnessctl s 10%- # decrease screen brightness
+bindsym $mod+F6 exec xbacklight -dec 10 || brightnessctl s 10%- # decrease screen brightness
 
 bindsym $mod+F4 fullscreen toggle
 
