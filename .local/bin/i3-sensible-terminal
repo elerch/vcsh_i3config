@@ -13,7 +13,7 @@
 # alacritty (fast, minimal but not quite as minimal as st)
 # st (fast, super minimal)
 # Everything else
-for terminal in "$TERMINAL" alacritty st x-terminal-emulator urxvt rxvt termit terminator Eterm aterm uxterm xterm gnome-terminal roxterm xfce4-terminal termite lxterminal mate-terminal terminology qterminal lilyterm tilix terminix konsole kitty guake tilda hyper; do
+for terminal in "$TERMINAL" mlterm st alacritty x-terminal-emulator urxvt rxvt termit terminator Eterm aterm uxterm xterm gnome-terminal roxterm xfce4-terminal termite lxterminal mate-terminal terminology qterminal lilyterm tilix terminix konsole kitty guake tilda hyper; do
     if command -v "$terminal" > /dev/null 2>&1; then
         exec "$terminal" "$@"
     fi

@@ -8,7 +8,7 @@ do
   read -r line
   if [ "${line%${line#??}}" = "[{" ] || [ "${line%${line#???}}" = ",[{" ]; then
     wtr="$(cache -q $cachetime curl --connect-timeout 3 https://wttr.lerch.org/?format="%c|%t"\&use_imperial=true)"
-    if [ ${#wtr} -lt 17 ]; then
+    if [ ${#wtr} -lt 18 ]; then
       forecast="$(echo "$wtr" | cut -d\| -f1)"
       temp="$(echo "$wtr" | cut -d\| -f2)"
       echo "${line%]},${json}${forecast}\",\"color\":\"#FFFFFF\"},${json}${temp}\"}]" || exit 1
