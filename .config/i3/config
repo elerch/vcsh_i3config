@@ -37,9 +37,9 @@ bindsym $mod+Return exec i3-sensible-terminal
 bindsym $mod+Shift+q kill
 bindsym $mod+q kill
 
-# upload/download clipboard
-bindsym $mod+Shift+u exec clipboard_upload
-bindsym $mod+Shift+o exec clipboard_download
+# upload/download clipboard (these are installed through nix flake)
+bindsym $mod+Shift+u exec clipboard-upload
+bindsym $mod+Shift+o exec clipboard-download
 
 # start dmenu (a program launcher)
 # bindsym $mod+d exec dmenu_run
