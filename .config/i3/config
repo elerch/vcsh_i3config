@@ -234,6 +234,13 @@ bindsym $mod+v exec webcamsettings
 
 for_window [class="(?i)vlc"] floating enable
 for_window [title="Microsoft Teams Notification"] floating enable
+for_window [title="(?<!Join from )Zoom Workplace"] floating enable
+for_window [title="Warning: Potentially Unsafe Paste"] floating enable
+for_window [title="^zoom$"] floating enable
+for_window [title="^Meeting$"] floating disable
+no_focus [title="(?<!Join from )Zoom Workplace"]
+no_focus [class="^zoom$"]
+no_focus [title="Amazon WorkSpaces"]
 
 # Load xresources
 exec --no-startup-id xrdb ~/.Xresources
