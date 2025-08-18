@@ -272,6 +272,7 @@ exec --no-startup-id hash pasystray 2>/dev/null && pasystray
 # Notifications, if installed
 exec --no-startup-id hash ntfy 2>/dev/null && ntfy subscribe --config ~/.config/ntfy/client.yml --from-config
 
+exec --no-startup-id hash dunst-tray 2>/dev/null && dunst-tray
 # Original "ubuntu theme (not sure where I got that from)"
 # client.focused #dd4814 #dd4814 #ffffff #902a07
 # client.focused_inactive #5e2750 #5e2750 #aea79f #5e2750
