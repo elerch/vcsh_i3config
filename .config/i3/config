@@ -252,7 +252,7 @@ exec --no-startup-id xmodmap ~/.Xmodmap
 exec --no-startup-id parcellite
 
 # Start compositor
-exec --no-startup-id picom
+exec --no-startup-id picom --backend xrender
 
 # Start xsettings so we can pass themes to flatpak
 exec --no-startup-id xsettingsd
