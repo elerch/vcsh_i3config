@@ -1,7 +1,16 @@
 #!/bin/sh
+
+# True when $1 looks like epoch seconds. Ten digits covers 2001 through 2286.
+is_epoch_seconds() {
+  case "$1" in
+    [0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]) return 0 ;;
+    *) return 1 ;;
+  esac
+}
+
 if [ "$#" -lt 2 ]; then
   echo 'usage: cache [-q] <seconds> <command>'
-  return 1
+  exit 1
 fi
 if [ "$1" = "-q" ]; then
   shift
@@ -18,23 +27,41 @@ shift
 cmdsha="$(echo "$@" | shasum|cut -d\  -f1)"
 filename="${cachedir}/${cmdsha}-out.cache"
 time="${cachedir}/${cmdsha}-time.cache"
-# POSIX way of getting seconds
-secondssinceepoch=$(PATH=$(getconf PATH) awk 'BEGIN{srand();print srand()}')
+# Seconds since the epoch.
+#
+# This used `awk 'BEGIN{srand();print srand()}'` as a POSIX-only clock read,
+# relying on srand() seeding from time(0) and returning the prior seed. mawk
+# 20250131 changed that seed to a high-resolution clock, so the idiom silently
+# began returning nanoseconds. A 1800-second TTL then expired after 1800
+# nanoseconds, making every call a miss -- roughly 360x the intended request
+# rate, with no visible symptom.
+secondssinceepoch=$(date +%s)
+
+# If the clock is not in seconds, run uncached rather than thrash. The previous
+# failure was invisible for months; make any repeat loud instead.
+if ! is_epoch_seconds "$secondssinceepoch"; then
+  echo "cache: '$secondssinceepoch' is not epoch seconds; running uncached" >&2
+  exec "$@"
+fi
 if [ -r "$time" ]; then
   commandtime="$(cat "$time")"
-  if [ "$(( commandtime + seconds ))" -lt "$secondssinceepoch" ]; then
+  # A timestamp we cannot trust -- empty, truncated, or written by the old
+  # nanosecond clock -- counts as expired. Without this, an existing nanosecond
+  # value reads as decades in the future and would freeze the cache permanently
+  # rather than refreshing it.
+  if ! is_epoch_seconds "$commandtime" ||
+     [ "$(( commandtime + seconds ))" -lt "$secondssinceepoch" ]; then
     # cache expired
-    rm "$filename"
-    rm "$time"
+    rm -f "$filename" "$time"
   fi
 fi
 if [ ! -r "$filename" ]; then
   (exec "$@") 2>/dev/null > "$filename"
   rc=$?
   if [ $rc -ne 0 ]; then
-    rm "$filename"
+    rm -f "$filename"
     echo "ERROR: Command not successful" >&2
-    return $rc
+    exit $rc
   fi
   printf "%s" "$secondssinceepoch" > "$time"
 fi

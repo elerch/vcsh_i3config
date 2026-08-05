@@ -8,7 +8,14 @@ do
   read -r line
   if [ "${line%${line#??}}" = "[{" ] || [ "${line%${line#???}}" = ",[{" ]; then
     wtr="$(cache -q $cachetime curl --connect-timeout 3 https://wttr.lerch.org/?format="%c|%t"\&use_imperial=true)"
-    if [ ${#wtr} -lt 18 ]; then
+    # A failed fetch yields an empty string, which is also "shorter than 18", so
+    # this branch used to render a blank reading instead of the intended error.
+    # Require a value that contains the separator the two `cut` calls depend on.
+    case "$wtr" in
+      ?*\|?*) valid=1 ;;
+      *) valid=0 ;;
+    esac
+    if [ "$valid" -eq 1 ] && [ ${#wtr} -lt 18 ]; then
       forecast="$(echo "$wtr" | cut -d\| -f1)"
       temp="$(echo "$wtr" | cut -d\| -f2)"
       echo "${line%]},${json}${forecast}\",\"color\":\"#FFFFFF\"},${json}${temp}\"}]" || exit 1
