@@ -242,6 +242,11 @@ no_focus [title="(?<!Join from )Zoom Workplace"]
 no_focus [class="^zoom$"]
 no_focus [title="Amazon WorkSpaces"]
 
+# Start the systemd graphical session (i3-session.target binds
+# graphical-session.target). stop first: with lingering, the previous login's
+# session may still be up with a stale env.
+exec --no-startup-id sh -c 'dbus-update-activation-environment --systemd DISPLAY XAUTHORITY XDG_SESSION_TYPE I3SOCK; systemctl --user stop i3-session.target; systemctl --user start i3-session.target'
+
 # Load xresources
 exec --no-startup-id xrdb ~/.Xresources
 
@@ -268,9 +273,6 @@ exec --no-startup-id nm-applet
 
 # Sound control (Pulse Audio)
 exec --no-startup-id hash pasystray 2>/dev/null && pasystray
-
-# Notifications, if installed
-exec --no-startup-id hash ntfy 2>/dev/null && ntfy subscribe --config ~/.config/ntfy/client.yml --from-config
 
 exec --no-startup-id hash dunst-tray 2>/dev/null && dunst-tray
 # Original "ubuntu theme (not sure where I got that from)"
